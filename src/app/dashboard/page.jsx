@@ -7,7 +7,7 @@ import { TransactionTable } from "@/components/transaction-table";
 import { BudgetProgress } from "@/components/budget-progress";
 import { DashboardCharts } from "@/components/dashboard-charts";
 import { FinancialInsights } from "@/components/financial-insights";
-import { AiChat } from "@/components/ai-chat";
+
 import { checkUser } from "@/lib/checkUser";
 import Image from "next/image";
 
@@ -61,8 +61,7 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      {/* Floating AI Chat Assistant */}
-      <AiChat />
+
     </div>
   );
 

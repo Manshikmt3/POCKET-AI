@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const transactionSchema = z.object({
   type: z.enum(["INCOME", "EXPENSE"]),
@@ -88,9 +89,13 @@ export function AddTransactionForm({ accounts }) {
     try {
       const res = await createTransaction(payload);
       if (res.success) {
+        toast.success("Transaction created successfully");
         router.push(`/account/${data.accountId}`);
+      } else {
+        toast.error(res.error || "Failed to create transaction");
       }
     } catch (error) {
+      toast.error(error.message || "Failed to create transaction");
       console.error("Failed to create transaction:", error);
     }
   };
