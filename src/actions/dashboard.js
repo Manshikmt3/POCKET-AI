@@ -148,7 +148,7 @@ export async function getDashboardData() {
   });
 
   if (!user) {
-    throw new Error("User not found");
+    throw new Error("User profile not found in database. Please refresh the page to sync your account.");
   }
 
   // Get all user data in parallel
