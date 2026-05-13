@@ -16,18 +16,18 @@ const serializeDecimal = (obj) => {
 };
 
 export async function getAccounts() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
-
-  const user = await db.user.findUnique({
-    where: { id: userId },
-  });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
   try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new Error("User profile not found. Please refresh the page.");
+    }
+
     const accounts = await db.account.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: "desc" },
@@ -42,7 +42,7 @@ export async function getAccounts() {
 
     return { success: true, data: accounts.map(serializeDecimal) };
   } catch (error) {
-    console.error(error.message);
+    console.error("Error in getAccounts:", error.message);
     return { success: false, error: error.message };
   }
 }

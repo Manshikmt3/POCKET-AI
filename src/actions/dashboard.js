@@ -140,47 +140,52 @@ export async function createAccount(data) {
 }
 
 export async function getDashboardData() {
-  const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
 
-  const user = await db.user.findUnique({
-    where: { id: userId },
-  });
+    const user = await db.user.findUnique({
+      where: { id: userId },
+    });
 
-  if (!user) {
-    throw new Error("User profile not found in database. Please refresh the page to sync your account.");
-  }
+    if (!user) {
+      throw new Error("User profile not found in database. Please refresh the page to sync your account.");
+    }
 
-  // Get all user data in parallel
-  const [accounts, transactions, budget, allTransactions] = await Promise.all([
-    db.account.findMany({
-      where: { userId: user.id },
-      orderBy: { createdAt: "desc" },
-    }),
-    db.transaction.findMany({
-      where: { userId: user.id },
-      orderBy: { date: "desc" },
-      take: 10, // Only recent transactions
-      include: {
-        account: true,
+    // Get all user data in parallel
+    const [accounts, transactions, budget, allTransactions] = await Promise.all([
+      db.account.findMany({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+      }),
+      db.transaction.findMany({
+        where: { userId: user.id },
+        orderBy: { date: "desc" },
+        take: 10, // Only recent transactions
+        include: {
+          account: true,
+        },
+      }),
+      db.budget.findFirst({
+        where: { userId: user.id },
+      }),
+      db.transaction.findMany({
+        where: { userId: user.id },
+      }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        accounts: accounts.map(serializeTransaction),
+        transactions: transactions.map(serializeTransaction),
+        budget: budget ? { ...budget, amount: budget.amount.toNumber() } : null,
+        allTransactions: allTransactions.map(serializeTransaction),
       },
-    }),
-    db.budget.findFirst({
-      where: { userId: user.id },
-    }),
-    db.transaction.findMany({
-      where: { userId: user.id },
-    }),
-  ]);
-
-  return {
-    success: true,
-    data: {
-      accounts: accounts.map(serializeTransaction),
-      transactions: transactions.map(serializeTransaction),
-      budget: budget ? { ...budget, amount: budget.amount.toNumber() } : null,
-      allTransactions: allTransactions.map(serializeTransaction),
-    },
-  };
+    };
+  } catch (error) {
+    console.error("Error in getDashboardData:", error.message);
+    return { success: false, error: error.message };
+  }
 }
 
