@@ -19,7 +19,7 @@ export default async function OnboardingPage() {
       <p className="text-muted-foreground mb-8 max-w-md">
         Let&apos;s get started by creating your first account. This will help you track your transactions and budget.
       </p>
-      
+
       <CreateAccountDrawer forceOpen={true} />
     </div>
   );
