@@ -52,8 +52,6 @@
   },
   "overrides": {
     "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "@react-email/components": "latest",
-    "react-email": "latest"
+    "react-dom": "19.2.4"
   }
 }
