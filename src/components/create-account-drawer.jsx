@@ -111,8 +111,7 @@ export function CreateAccountDrawer({ children }) {
                   defaultValue={type}
                 >
                   <SelectTrigger id="type" className="h-12 border-gray-200 rounded-xl text-left">
-                    {type === "CURRENT" ? "Current" : 
-                     type === "SAVINGS" ? "Savings" : "Select type"}
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="CURRENT">Current</SelectItem>
