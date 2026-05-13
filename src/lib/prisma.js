@@ -12,14 +12,15 @@ const pool = new pg.Pool({
   connectionString,
   max: 10,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 5000, // Slightly longer for stability
+  allowExitOnIdle: true,
 });
 
 const adapter = new PrismaPg(pool);
 
 export const db = globalThis.prisma ?? new PrismaClient({ 
   adapter,
-  log: ["error", "warn"],
+  log: ["error"],
 });
 
 if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
