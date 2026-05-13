@@ -4,7 +4,7 @@ import { db } from "../prisma";
 import { Resend } from "resend";
 import BudgetAlertEmail from "@/emails/budget-alert";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || "re_123");
 
 export const checkBudgetAlert = inngest.createFunction(
   { id: "check-budget-alert", name: "Check Budget Alert", triggers: [{ event: "transaction.created" }] },
