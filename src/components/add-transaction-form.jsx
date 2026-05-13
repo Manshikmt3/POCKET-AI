@@ -182,16 +182,7 @@ export function AddTransactionForm({ accounts }) {
               <Label className="text-sm font-bold text-gray-700">Currency</Label>
               <Select onValueChange={(val) => setValue("currency", val)} value={selectedCurrency}>
                 <SelectTrigger className="h-12 border-gray-200 rounded-xl text-left">
-                  {selectedCurrency ? (
-                    <span className="flex items-center gap-2">
-                      <span className="font-mono text-xs bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">
-                        {selectedCurrency}
-                      </span>
-                      <span>{getCurrencySymbol(selectedCurrency)}</span>
-                    </span>
-                  ) : (
-                    "Select currency"
-                  )}
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="max-h-60 overflow-y-auto">
                   {CURRENCIES.map((currency) => (
@@ -217,9 +208,7 @@ export function AddTransactionForm({ accounts }) {
               <Label className="text-sm font-bold text-gray-700">Account</Label>
               <Select onValueChange={(val) => setValue("accountId", val)} value={accountId}>
                 <SelectTrigger className="h-12 border-gray-200 rounded-xl text-left">
-                  {accountId 
-                    ? accounts.find(a => a.id === accountId)?.name 
-                    : "Select account"}
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {accounts.map((acc) => (
@@ -237,11 +226,7 @@ export function AddTransactionForm({ accounts }) {
               <Label className="text-sm font-bold text-gray-700">Category</Label>
               <Select onValueChange={(val) => setValue("category", val)} value={category}>
                 <SelectTrigger className="h-12 border-gray-200 rounded-xl text-left">
-                  {category ? (
-                    [...INCOME_CATEGORIES, ...EXPENSE_CATEGORIES].find(c => c.id === category)?.name
-                  ) : (
-                    "Select category"
-                  )}
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {(type === "INCOME" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES).map((cat) => (
@@ -311,11 +296,7 @@ export function AddTransactionForm({ accounts }) {
               <Label className="text-sm font-bold text-gray-700">Interval</Label>
               <Select onValueChange={(val) => setValue("recurringInterval", val)} value={recurringInterval || ""}>
                 <SelectTrigger className="h-12 border-gray-200 rounded-xl text-left">
-                  {recurringInterval ? (
-                    recurringInterval.charAt(0) + recurringInterval.slice(1).toLowerCase()
-                  ) : (
-                    "Select interval"
-                  )}
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="DAILY">Daily</SelectItem>

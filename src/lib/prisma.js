@@ -5,27 +5,30 @@ import pg from "pg";
 const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
-  throw new Error("CRITICAL: DATABASE_URL is missing from environment variables!");
+  throw new Error("DATABASE_URL is missing! Check your .env file.");
 }
 
-console.log(`Database URL detected: ${connectionString.substring(0, 20)}...`);
+const createPrismaClient = () => {
+  const pool = new pg.Pool({
+    connectionString,
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+    allowExitOnIdle: true, // Crucial for Next.js dev server
+  });
 
-const pool = new pg.Pool({
-  connectionString,
-  max: 10,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000, // Slightly longer for stability
-  allowExitOnIdle: true,
-});
+  const adapter = new PrismaPg(pool);
+  
+  return new PrismaClient({
+    adapter,
+    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+  });
+};
 
-const adapter = new PrismaPg(pool);
+const globalForPrisma = globalThis;
+export const db = globalForPrisma.prisma ?? createPrismaClient();
 
-export const db = globalThis.prisma ?? new PrismaClient({ 
-  adapter,
-  log: ["error"],
-});
-
-if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
 
 // Basic health check for development
 if (process.env.NODE_ENV === "development") {
