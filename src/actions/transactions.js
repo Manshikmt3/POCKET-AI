@@ -8,11 +8,11 @@ import { request } from "@arcjet/next";
 
 const serializeAmount = (obj) => {
   const serialized = { ...obj };
-  if (obj.amount && typeof obj.amount.toNumber === "function") {
-    serialized.amount = obj.amount.toNumber();
+  if (obj.amount !== undefined && obj.amount !== null) {
+    serialized.amount = typeof obj.amount.toNumber === "function" ? obj.amount.toNumber() : Number(obj.amount);
   }
-  if (obj.balance && typeof obj.balance.toNumber === "function") {
-    serialized.balance = obj.balance.toNumber();
+  if (obj.balance !== undefined && obj.balance !== null) {
+    serialized.balance = typeof obj.balance.toNumber === "function" ? obj.balance.toNumber() : Number(obj.balance);
   }
   if (obj.account) {
     serialized.account = serializeAmount(obj.account);
