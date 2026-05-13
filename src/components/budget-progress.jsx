@@ -11,7 +11,9 @@ import { getCurrencySymbol } from "@/lib/currencies";
 
 export function BudgetProgress({ initialBudget, currentMonthExpenses }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [amount, setAmount] = useState(initialBudget?.amount || 0);
+  const [amount, setAmount] = useState(
+    initialBudget?.amount ? Number(initialBudget.amount) : 0
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const budgetAmount = parseFloat(initialBudget?.amount || 0);
