@@ -1,6 +1,9 @@
-export function register() {
-  // Required to bypass Supabase self-signed TLS certificate in local dev
-  if (process.env.NODE_ENV !== "production") {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+import { db } from "@/lib/prisma";
+
+export async function register() {
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    if (process.env.NODE_ENV !== "production") {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    }
   }
 }
