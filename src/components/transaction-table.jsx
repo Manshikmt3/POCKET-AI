@@ -35,7 +35,9 @@ export function TransactionTable({ transactions, accounts }) {
         {accounts && accounts.length > 0 && (
           <Select value={selectedAccountId} onValueChange={setSelectedAccountId}>
             <SelectTrigger className="w-[180px] h-9 border-gray-200 rounded-lg text-gray-500 text-left">
-              <SelectValue />
+              {selectedAccountId === "all" 
+                ? "All Accounts" 
+                : accounts.find(a => a.id === selectedAccountId)?.name}
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Accounts</SelectItem>
