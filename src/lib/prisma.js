@@ -5,8 +5,10 @@ import pg from "pg";
 const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
-  console.error("DATABASE_URL is not defined in environment variables");
+  throw new Error("CRITICAL: DATABASE_URL is missing from environment variables!");
 }
+
+console.log(`Database URL detected: ${connectionString.substring(0, 20)}...`);
 
 const pool = new pg.Pool({
   connectionString,
